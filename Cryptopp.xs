@@ -1,4 +1,5 @@
 #include <crypto++/sha.h>
+#include <crypto++/tiger.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,6 +16,15 @@ extern "C" {
 }
 #endif
 
+#define PP_HASH_FINALIZE(self) do {\
+        byte* digest; \
+        Newx(digest, (self)->DigestSize(), byte); \
+        (self)->Final(digest); \
+        SV *sv = newSVpv((const char*)digest, (self)->DigestSize()); \
+        Safefree(digest); \
+        RETVAL = sv; \
+    } while (0)
+
 #define XS_STATE(type, x) \
     INT2PTR(type, SvROK(x) ? SvIV(SvRV(x)) : SvIV(x))
 
@@ -26,6 +36,7 @@ extern "C" {
     }
 
 typedef CryptoPP::SHA1    CryptoPPSHA1;
+typedef CryptoPP::Tiger    CryptoPPTiger;
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::SHA1
 
@@ -52,12 +63,35 @@ SV*
 final(self)
     CryptoPPSHA1* self;
 CODE:
-    byte* digest;
-    Newx(digest, self->DigestSize(), byte);
-    self->Final(digest);
-    SV *sv = newSVpv((const char*)digest, self->DigestSize());
-    Safefree(digest);
-    RETVAL = sv;
+    PP_HASH_FINALIZE(self);
+OUTPUT:
+    RETVAL
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::Tiger
+
+PROTOTYPES: DISABLE
+
+CryptoPPTiger*
+Crypt::Cryptopp::Tiger::new()
+CODE:
+    CryptoPPTiger *obj = new CryptoPP::Tiger();
+    RETVAL = obj;
+OUTPUT:
+    RETVAL
+
+void
+update(self, SV*src)
+    CryptoPPTiger* self;
+CODE:
+    STRLEN len;
+    char * str = SvPV(src, len);
+    self->Update((const byte*)str, len);
+
+SV*
+final(self)
+    CryptoPPTiger* self;
+CODE:
+    PP_HASH_FINALIZE(self);
 OUTPUT:
     RETVAL
 

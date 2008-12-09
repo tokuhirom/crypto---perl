@@ -1,11 +1,17 @@
 TYPEMAP
 CryptoPPSHA1*	T_CRYPTOPP_SHA1
+CryptoPPTiger*	T_CRYPTOPP_Tiger
 
 INPUT
 T_CRYPTOPP_SHA1
         $var = XS_STATE(CryptoPPSHA1 *, $arg);
 
+T_CRYPTOPP_Tiger
+        $var = XS_STATE(CryptoPPTiger *, $arg);
+
 OUTPUT
 T_CRYPTOPP_SHA1
         XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::SHA1", $var);
 
+T_CRYPTOPP_Tiger
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::Tiger", $var);
