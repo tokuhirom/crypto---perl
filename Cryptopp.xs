@@ -1,6 +1,7 @@
 #include <crypto++/sha.h>
 #include <crypto++/tiger.h>
 #include <crypto++/crc.h>
+#include <crypto++/adler32.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +40,7 @@ extern "C" {
 typedef CryptoPP::SHA1     CryptoPPSHA1;
 typedef CryptoPP::Tiger    CryptoPPTiger;
 typedef CryptoPP::CRC32    CryptoPPCRC32;
+typedef CryptoPP::Adler32  CryptoPPAdler32;
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::SHA1
 
@@ -118,6 +120,32 @@ CODE:
 SV*
 final(self)
     CryptoPPCRC32* self;
+CODE:
+    PP_HASH_FINALIZE(self);
+OUTPUT:
+    RETVAL
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::Adler32
+
+CryptoPPAdler32*
+Crypt::Cryptopp::Adler32::new()
+CODE:
+    CryptoPPAdler32 *obj = new CryptoPP::Adler32();
+    RETVAL = obj;
+OUTPUT:
+    RETVAL
+
+void
+update(self, SV*src)
+    CryptoPPAdler32* self;
+CODE:
+    STRLEN len;
+    char * str = SvPV(src, len);
+    self->Update((const byte*)str, len);
+
+SV*
+final(self)
+    CryptoPPAdler32* self;
 CODE:
     PP_HASH_FINALIZE(self);
 OUTPUT:
