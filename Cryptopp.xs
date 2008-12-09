@@ -52,10 +52,11 @@ SV*
 final(self)
     CryptoPPSHA1* self;
 CODE:
-    byte * digest = (byte*)malloc(sizeof(byte) * self->DigestSize());
+    byte* digest;
+    Newx(digest, self->DigestSize(), byte);
     self->Final(digest);
     SV *sv = newSVpv((const char*)digest, self->DigestSize());
-    free(digest);
+    Safefree(digest);
     RETVAL = sv;
 OUTPUT:
     RETVAL
