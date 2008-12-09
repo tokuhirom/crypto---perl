@@ -5,3 +5,10 @@ http://allmydata.org/trac/pycryptopp
 
 swig -c++ -perl plusplus.i
 
+*SAME FUNCTION IN CPAN
+
+Digest::SHA
+Digest::SHA1
+Digest::CRC32
+Digest::Adler
+
