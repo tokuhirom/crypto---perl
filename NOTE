@@ -1,0 +1,7 @@
+ref.
+http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=349853
+http://www.cryptopp.com/wiki/Main_Page
+http://allmydata.org/trac/pycryptopp
+
+swig -c++ -perl plusplus.i
+

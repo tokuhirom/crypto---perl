@@ -1,0 +1,15 @@
+TYPEMAP
+CryptoPPSHA1	T_CRYPTOPP_SHA1
+
+OUTPUT
+T_CRYPTOPP_SHA1
+    sv_setref_pv($arg, CLASS, (void*)$var);
+
+INPUT
+T_CRYPTOPP_SHA1
+    if (sv_isobject($arg)) {
+        $var = INT2PTR(CryptoPP::SHA1*, SvIV((SV*)SvRV($arg)));
+    } else {
+        croak(\"$var is not CryptoPP::SHA1\");
+    }
+

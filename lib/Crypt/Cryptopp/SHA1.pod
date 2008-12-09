@@ -1,0 +1,28 @@
+=head1 NAME
+
+Crypt::Cryptopp::SHA1 - hash algoritm sha1
+
+=head1 SYNOPSIS
+
+    my $sha1 = Crypt::Cryptopp::SHA1->new();
+    $sha1->update("foo");
+    unpack("H*", $sha1->final()); # => '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33'
+
+=head1 METHODS
+
+=over 4
+
+=item my $sha1 = Crypt::Cryptopp::SHA1->new();
+
+create new instance
+
+=item $sha1->update('message')
+
+process more input
+
+=item $sha1->final()
+
+compute hash for current message, then restart for a new message 
+
+=back
+
