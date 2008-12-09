@@ -1,10 +1,14 @@
 TYPEMAP
+CryptoPPHashTransformation*	T_CRYPTOPP_HASH
 CryptoPPSHA1*	T_CRYPTOPP_SHA1
 CryptoPPTiger*	T_CRYPTOPP_Tiger
 CryptoPPCRC32*	T_CRYPTOPP_CRC32
 CryptoPPAdler32*	T_CRYPTOPP_Adler32
 
 INPUT
+T_CRYPTOPP_HASH
+        $var = XS_STATE(CryptoPPHashTransformation *, $arg);
+
 T_CRYPTOPP_SHA1
         $var = XS_STATE(CryptoPPSHA1 *, $arg);
 
@@ -18,6 +22,9 @@ T_CRYPTOPP_Adler32
         $var = XS_STATE(CryptoPPAdler32 *, $arg);
 
 OUTPUT
+T_CRYPTOPP_HASH
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::HashTransformation", $var);
+
 T_CRYPTOPP_SHA1
         XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::SHA1", $var);
 

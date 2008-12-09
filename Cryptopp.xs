@@ -19,12 +19,6 @@ extern "C" {
 #endif
 
 #define PP_HASH_FINALIZE(self) do {\
-        byte* digest; \
-        Newx(digest, (self)->DigestSize(), byte); \
-        (self)->Final(digest); \
-        SV *sv = newSVpv((const char*)digest, (self)->DigestSize()); \
-        Safefree(digest); \
-        RETVAL = sv; \
     } while (0)
 
 #define XS_STATE(type, x) \
@@ -37,10 +31,34 @@ extern "C" {
         sv_setref_pv(sv, class, (void *) obj); \
     }
 
+typedef CryptoPP::HashTransformation     CryptoPPHashTransformation;
 typedef CryptoPP::SHA1     CryptoPPSHA1;
 typedef CryptoPP::Tiger    CryptoPPTiger;
 typedef CryptoPP::CRC32    CryptoPPCRC32;
 typedef CryptoPP::Adler32  CryptoPPAdler32;
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::HashTransformation
+
+void
+update(self, SV*src)
+    CryptoPPHashTransformation* self;
+CODE:
+    STRLEN len;
+    char * str = SvPV(src, len);
+    self->Update((const byte*)str, len);
+
+SV*
+final(self)
+    CryptoPPHashTransformation* self;
+CODE:
+    byte* digest;
+    Newx(digest, (self)->DigestSize(), byte);
+    (self)->Final(digest);
+    SV *sv = newSVpv((const char*)digest, (self)->DigestSize());
+    Safefree(digest);
+    RETVAL = sv;
+OUTPUT:
+    RETVAL
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::SHA1
 
@@ -52,22 +70,6 @@ CODE:
     CryptoPPSHA1 *obj = new CryptoPP::SHA1();
     assert(obj);
     RETVAL = obj;
-OUTPUT:
-    RETVAL
-
-void
-update(self, SV*src)
-    CryptoPPSHA1* self;
-CODE:
-    STRLEN len;
-    char * str = SvPV(src, len);
-    self->Update((const byte*)str, len);
-
-SV*
-final(self)
-    CryptoPPSHA1* self;
-CODE:
-    PP_HASH_FINALIZE(self);
 OUTPUT:
     RETVAL
 
@@ -83,22 +85,6 @@ CODE:
 OUTPUT:
     RETVAL
 
-void
-update(self, SV*src)
-    CryptoPPTiger* self;
-CODE:
-    STRLEN len;
-    char * str = SvPV(src, len);
-    self->Update((const byte*)str, len);
-
-SV*
-final(self)
-    CryptoPPTiger* self;
-CODE:
-    PP_HASH_FINALIZE(self);
-OUTPUT:
-    RETVAL
-
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::CRC32
 
 CryptoPPCRC32*
@@ -109,22 +95,6 @@ CODE:
 OUTPUT:
     RETVAL
 
-void
-update(self, SV*src)
-    CryptoPPCRC32* self;
-CODE:
-    STRLEN len;
-    char * str = SvPV(src, len);
-    self->Update((const byte*)str, len);
-
-SV*
-final(self)
-    CryptoPPCRC32* self;
-CODE:
-    PP_HASH_FINALIZE(self);
-OUTPUT:
-    RETVAL
-
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::Adler32
 
 CryptoPPAdler32*
@@ -132,22 +102,6 @@ Crypt::Cryptopp::Adler32::new()
 CODE:
     CryptoPPAdler32 *obj = new CryptoPP::Adler32();
     RETVAL = obj;
-OUTPUT:
-    RETVAL
-
-void
-update(self, SV*src)
-    CryptoPPAdler32* self;
-CODE:
-    STRLEN len;
-    char * str = SvPV(src, len);
-    self->Update((const byte*)str, len);
-
-SV*
-final(self)
-    CryptoPPAdler32* self;
-CODE:
-    PP_HASH_FINALIZE(self);
 OUTPUT:
     RETVAL
 
