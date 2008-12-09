@@ -1,5 +1,6 @@
 #include <crypto++/sha.h>
 #include <crypto++/tiger.h>
+#include <crypto++/crc.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,8 +36,9 @@ extern "C" {
         sv_setref_pv(sv, class, (void *) obj); \
     }
 
-typedef CryptoPP::SHA1    CryptoPPSHA1;
+typedef CryptoPP::SHA1     CryptoPPSHA1;
 typedef CryptoPP::Tiger    CryptoPPTiger;
+typedef CryptoPP::CRC32    CryptoPPCRC32;
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::SHA1
 
@@ -90,6 +92,32 @@ CODE:
 SV*
 final(self)
     CryptoPPTiger* self;
+CODE:
+    PP_HASH_FINALIZE(self);
+OUTPUT:
+    RETVAL
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::CRC32
+
+CryptoPPCRC32*
+Crypt::Cryptopp::CRC32::new()
+CODE:
+    CryptoPPCRC32 *obj = new CryptoPP::CRC32();
+    RETVAL = obj;
+OUTPUT:
+    RETVAL
+
+void
+update(self, SV*src)
+    CryptoPPCRC32* self;
+CODE:
+    STRLEN len;
+    char * str = SvPV(src, len);
+    self->Update((const byte*)str, len);
+
+SV*
+final(self)
+    CryptoPPCRC32* self;
 CODE:
     PP_HASH_FINALIZE(self);
 OUTPUT:
