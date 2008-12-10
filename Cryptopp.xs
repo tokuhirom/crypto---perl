@@ -68,6 +68,11 @@ CODE:
 OUTPUT:
     RETVAL
 
+void
+DESTROY(CryptoPPHashTransformation* self)
+CODE:
+    delete self;
+
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::SHA1
 
 PROTOTYPES: ENABLE
