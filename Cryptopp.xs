@@ -1,7 +1,10 @@
 #include <crypto++/sha.h>
+#include <crypto++/md2.h>
+#include <crypto++/md5.h>
 #include <crypto++/tiger.h>
 #include <crypto++/crc.h>
 #include <crypto++/adler32.h>
+#include <crypto++/rsa.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,11 +34,16 @@ extern "C" {
         sv_setref_pv(sv, class, (void *) obj); \
     }
 
+
 typedef CryptoPP::HashTransformation     CryptoPPHashTransformation;
 typedef CryptoPP::SHA1     CryptoPPSHA1;
 typedef CryptoPP::Tiger    CryptoPPTiger;
 typedef CryptoPP::CRC32    CryptoPPCRC32;
 typedef CryptoPP::Adler32  CryptoPPAdler32;
+typedef CryptoPP::MD5  CryptoPPMD5;
+typedef CryptoPP::MD2  CryptoPPMD2;
+
+typedef CryptoPP::PK_Signer  CryptoPPPKSigner;
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::HashTransformation
 
@@ -105,3 +113,22 @@ CODE:
 OUTPUT:
     RETVAL
 
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::MD5
+
+CryptoPPMD5*
+Crypt::Cryptopp::MD5::new()
+CODE:
+    CryptoPPMD5 *obj = new CryptoPP::MD5();
+    RETVAL = obj;
+OUTPUT:
+    RETVAL
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::MD2
+
+CryptoPPMD2*
+Crypt::Cryptopp::MD2::new()
+CODE:
+    CryptoPPMD2 *obj = new CryptoPP::MD2();
+    RETVAL = obj;
+OUTPUT:
+    RETVAL

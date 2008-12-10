@@ -4,6 +4,9 @@ CryptoPPSHA1*	T_CRYPTOPP_SHA1
 CryptoPPTiger*	T_CRYPTOPP_Tiger
 CryptoPPCRC32*	T_CRYPTOPP_CRC32
 CryptoPPAdler32*	T_CRYPTOPP_Adler32
+CryptoPPMD5*	T_CRYPTOPP_MD5
+CryptoPPMD2*	T_CRYPTOPP_MD2
+CryptoPPPKSigner*	T_CRYPTOPP_PKSigner
 
 INPUT
 T_CRYPTOPP_HASH
@@ -21,6 +24,15 @@ T_CRYPTOPP_CRC32
 T_CRYPTOPP_Adler32
         $var = XS_STATE(CryptoPPAdler32 *, $arg);
 
+T_CRYPTOPP_MD5
+        $var = XS_STATE(CryptoPPMD5 *, $arg);
+
+T_CRYPTOPP_MD2
+        $var = XS_STATE(CryptoPPMD2 *, $arg);
+
+T_CRYPTOPP_PKSigner
+        $var = XS_STATE(CryptoPPPKSigner *, $arg);
+
 OUTPUT
 T_CRYPTOPP_HASH
         XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::HashTransformation", $var);
@@ -36,4 +48,13 @@ T_CRYPTOPP_CRC32
 
 T_CRYPTOPP_Adler32
         XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::Adler32", $var);
+
+T_CRYPTOPP_MD5
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::MD5", $var);
+
+T_CRYPTOPP_MD2
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::MD2", $var);
+
+T_CRYPTOPP_PKSigner
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::PKSigner", $var);
 

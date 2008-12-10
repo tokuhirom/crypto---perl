@@ -8,7 +8,7 @@ XSLoader::load(__PACKAGE__, $VERSION);
 
 {
     no strict 'refs';
-    for my $klass (qw/SHA1 Tiger CRC32 Adler32/) {
+    for my $klass (qw/SHA1 Tiger CRC32 Adler32 MD5 MD2/) {
         unshift @{"Crypt::Cryptopp::${klass}::ISA"}, 'Crypt::Cryptopp::HashTransformation';
     }
 }
