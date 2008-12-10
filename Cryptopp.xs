@@ -5,6 +5,7 @@
 #include <crypto++/crc.h>
 #include <crypto++/adler32.h>
 #include <crypto++/rsa.h>
+#include <crypto++/ripemd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,16 +47,39 @@ CODE:
     CryptoPPHashTransformation* self;
     if (!strcmp(type, "SHA1")) {
         self = new CryptoPP::SHA1();
+    } else if (!strcmp(type, "SHA256")) {
+        self = new CryptoPP::SHA256();
+    } else if (!strcmp(type, "SHA384")) {
+        self = new CryptoPP::SHA384();
+    } else if (!strcmp(type, "SHA512")) {
+        self = new CryptoPP::SHA512();
+    } else if (!strcmp(type, "RIPEMD160")) {
+        self = new CryptoPP::RIPEMD160();
+    } else if (!strcmp(type, "RIPEMD320")) {
+        self = new CryptoPP::RIPEMD320();
+    } else if (!strcmp(type, "RIPEMD128")) {
+        self = new CryptoPP::RIPEMD128();
+    } else if (!strcmp(type, "RIPEMD256")) {
+        self = new CryptoPP::RIPEMD256();
+        /*
+         *  following module doesn't works.
+         *  } else if (!strcmp(type, "SHA224")) {
+         *      self = new CryptoPP::SHA224();
+         *  } else if (!strcmp(type, "Whirlpool")) {
+         *      self = new CryptoPP::Whirlpool();
+         *  } else if (!strcmp(type, "MD4")) {
+         *      self = new CryptoPP::MD4();
+         */
     } else if (!strcmp(type, "Tiger")) {
         self = new CryptoPP::Tiger();
     } else if (!strcmp(type, "CRC32")) {
         self = new CryptoPP::CRC32();
     } else if (!strcmp(type, "Adler32")) {
         self = new CryptoPP::Adler32();
-    } else if (!strcmp(type, "MD5")) {
-        self = new CryptoPP::MD5();
     } else if (!strcmp(type, "MD2")) {
         self = new CryptoPP::MD2();
+    } else if (!strcmp(type, "MD5")) {
+        self = new CryptoPP::MD5();
     } else {
         croak("unknown hash-transformation algorithm");
     }
