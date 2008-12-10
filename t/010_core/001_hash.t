@@ -10,9 +10,8 @@ filters {
 };
 
 sub hash {
-    my $moniker = shift;
-    my $klass = "Crypt::Cryptopp::$moniker";
-    my $hash = $klass->new();
+    my $type = shift;
+    my $hash = Crypt::Cryptopp::HashTransformation->new($type);
     $hash->update('HOGE');
     unpack("H*", $hash->final());
 }
