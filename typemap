@@ -1,13 +1,18 @@
 TYPEMAP
 CryptoPPHashTransformation*	T_CRYPTOPP_HASH
+CryptoPPRNG*	T_CRYPTOPP_RNG
 CryptoPPPKSigner*	T_CRYPTOPP_PKSigner
 
 INPUT
 T_CRYPTOPP_HASH
         $var = XS_STATE(CryptoPPHashTransformation *, $arg);
+T_CRYPTOPP_RNG
+        $var = XS_STATE(CryptoPPRNG *, $arg);
 
 OUTPUT
 T_CRYPTOPP_HASH
         XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::HashTransformation", $var);
 
+T_CRYPTOPP_RNG
+        XS_STRUCT2OBJ($arg, "Crypt::Cryptopp::RandomNumberGenerator", $var);
 

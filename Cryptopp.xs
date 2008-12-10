@@ -1,3 +1,4 @@
+#include <crypto++/cryptlib.h>
 #include <crypto++/sha.h>
 #include <crypto++/md2.h>
 #include <crypto++/md5.h>
@@ -6,6 +7,7 @@
 #include <crypto++/adler32.h>
 #include <crypto++/rsa.h>
 #include <crypto++/ripemd.h>
+#include <crypto++/osrng.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,6 +39,7 @@ extern "C" {
 
 
 typedef CryptoPP::HashTransformation     CryptoPPHashTransformation;
+typedef CryptoPP::RandomNumberGenerator     CryptoPPRNG;
 typedef CryptoPP::PK_Signer  CryptoPPPKSigner;
 
 MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::HashTransformation
@@ -111,6 +114,50 @@ OUTPUT:
 
 void
 DESTROY(CryptoPPHashTransformation* self)
+CODE:
+    delete self;
+
+MODULE = Crypt::Cryptopp  PACKAGE = Crypt::Cryptopp::RandomNumberGenerator
+
+CryptoPPRNG*
+Crypt::Cryptopp::RandomNumberGenerator::new(const char * type)
+CODE:
+    CryptoPPRNG* self;
+    if (!strcmp(type, "BlockingRng")) {
+        self = new CryptoPP::BlockingRng();
+    } else if (!strcmp(type, "NonblockingRng")) {
+        self = new CryptoPP::NonblockingRng();
+    } else {
+        croak("unknown random number generator algorithm");
+    }
+    assert(self);
+    RETVAL = self;
+OUTPUT:
+    RETVAL
+
+U8
+generate_byte(CryptoPPRNG* self)
+CODE:
+    RETVAL = self->GenerateByte();
+OUTPUT:
+    RETVAL
+
+U32
+generate_word32(CryptoPPRNG* self)
+CODE:
+    RETVAL = self->GenerateWord32();
+OUTPUT:
+    RETVAL
+
+const char *
+algorithm_name(CryptoPPRNG* self)
+CODE:
+    RETVAL = self->AlgorithmName().c_str();
+OUTPUT:
+    RETVAL
+
+void
+DESTROY(CryptoPPRNG* self)
 CODE:
     delete self;
 
