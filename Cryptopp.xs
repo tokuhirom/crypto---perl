@@ -1,12 +1,14 @@
 #include <crypto++/cryptlib.h>
 #include <crypto++/sha.h>
 #include <crypto++/md2.h>
+#include <crypto++/md4.h>
 #include <crypto++/md5.h>
 #include <crypto++/tiger.h>
 #include <crypto++/crc.h>
 #include <crypto++/adler32.h>
 #include <crypto++/rsa.h>
 #include <crypto++/ripemd.h>
+#include <crypto++/whrlpool.h>
 #include <crypto++/osrng.h>
 
 #ifdef __cplusplus
@@ -64,14 +66,12 @@ CODE:
         self = new CryptoPP::RIPEMD128();
     } else if (!strcmp(type, "RIPEMD256")) {
         self = new CryptoPP::RIPEMD256();
+    } else if (!strcmp(type, "Whirlpool")) {
+        self = new CryptoPP::Whirlpool();
         /*
          *  following module doesn't works.
          *  } else if (!strcmp(type, "SHA224")) {
          *      self = new CryptoPP::SHA224();
-         *  } else if (!strcmp(type, "Whirlpool")) {
-         *      self = new CryptoPP::Whirlpool();
-         *  } else if (!strcmp(type, "MD4")) {
-         *      self = new CryptoPP::MD4();
          */
     } else if (!strcmp(type, "Tiger")) {
         self = new CryptoPP::Tiger();
@@ -81,6 +81,8 @@ CODE:
         self = new CryptoPP::Adler32();
     } else if (!strcmp(type, "MD2")) {
         self = new CryptoPP::MD2();
+    } else if (!strcmp(type, "MD4")) {
+        self = new CryptoPP::MD4();
     } else if (!strcmp(type, "MD5")) {
         self = new CryptoPP::MD5();
     } else {

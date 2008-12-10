@@ -17,8 +17,8 @@ sub rng {
 run {
     my $block = shift;
     my $rng = $block->input;
-    like sprintf('%0x', $rng->generate_byte()),   qr/^[a-h0-9]{2}$/;
-    like sprintf('%0x', $rng->generate_word32()), qr/^[a-h0-9]{8}$/;
+    like sprintf('%02x', $rng->generate_byte()),   qr/^[a-h0-9]{2}$/;
+    like sprintf('%08x', $rng->generate_word32()), qr/^[a-h0-9]{8}$/;
     like $rng->algorithm_name(), qr/^[A-Za-z0-9]+$/, $rng->algorithm_name();
 };
 
